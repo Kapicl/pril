@@ -1,14 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post
-def post_list(request):
- posts = Post.published.all()
- return render(request,
- 'blog/post/list.html',
- {'posts': posts})
-def post_detail(request, id):
- post = get_object_or_404(Post,
- id=id,
-status=Post.Status.PUBLISHED)
- return render(request,
- 'blog/post/detail.html',
- {'post': post})
+from django.shortcuts import render
+
+# Данные фильмов (можно заменить на базу данных)
+MOVIES = [
+    {"title": "Интерстеллар", "description": "Космическая эпопея о выживании человечества.", "image": "https://via.placeholder.com/150"},
+    {"title": "Начало", "description": "Фильм о проникновении в сознание через сны.", "image": "https://via.placeholder.com/150"},
+    {"title": "Матрица", "description": "Культовый фильм о виртуальной реальности.", "image": "https://via.placeholder.com/150"},
+]
+
+def movie_list(request):
+    return render(request, 'movies.html', {"movies": MOVIES})
+
