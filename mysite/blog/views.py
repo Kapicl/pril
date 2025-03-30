@@ -1,6 +1,25 @@
-from django.shortcuts import get_object_or_404
-from .models import Comment
-from .forms import CommentForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login
+from .models import Post, Comment
+from .forms import UserRegistrationForm, CommentForm
+
+def post_list(request):
+    posts = Post.published.all()
+    return render(request, "blog/post_list.html", {"posts": posts})
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            login(request, user)
+            return redirect("post_list")
+    else:
+        form = UserRegistrationForm()
+    return render(request, "blog/register.html", {"form": form})
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
